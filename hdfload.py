@@ -26,3 +26,11 @@ def getrho(fil):
     tempk = getvar(fil, 'tempk')
     rho = (press*100) / (287*tempk)
     return rho
+
+def meanprof(fil, varname):
+    if varname == 'rho':
+        var = getrho(fil)
+    else:
+        var = getvar(fil,varname)
+    varout = np.mean(np.mean(var,1),1)
+    return varout

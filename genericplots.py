@@ -13,8 +13,8 @@ def timeseries(pcp, xs, outname, title, xlab, ylab):
     plt.clf()
 
 def movie(pcp, outname, title, height):
-    numfiles = len(pcp)
-    pcp = np.asarray(pcp)
+    numfiles = pcp.shape[0]
+#    pcp = np.asarray(pcp)
     #pcp = np.swapaxes(pcp,1,2)
     print pcp.max(), pcp.min()
     xs = np.arange(pcp.shape[2])*.25
@@ -27,16 +27,16 @@ def movie(pcp, outname, title, height):
     z2 = pcp[0,:,:]
     print z2.shape
     
-    cont2 = plt.contourf(xs[::4],ys,z2[:,::4],levels=np.linspace(-30,25,20))#levels=np.linspace(np.min(pcp),np.max(pcp),20))
+    cont2 = plt.contourf(xs,ys,z2,levels=np.linspace(np.min(pcp),np.max(pcp),20))
     c2 = plt.colorbar(cont2,label = title) 
-    plt.ylim(0,16)
+#    plt.ylim(0,16)
 
     def animate(i):
         z2 = pcp[i,:,:]
         plt.clf()
-        cont2 = plt.contourf(xs[::4],ys,z2[:,::4],levels=np.linspace(-30,25,20))#levels=np.linspace(np.min(pcp),np.max(pcp),20))
+        cont2 = plt.contourf(xs,ys,z2,levels=np.linspace(np.min(pcp),np.max(pcp),20))
         c2 = plt.colorbar(cont2,label = title)
-        plt.ylim(0,16)
+#        plt.ylim(0,16)
         onetitle='Time ' + str(i)
         plt.title(onetitle)
         return cont2
