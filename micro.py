@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.special import gamma
-
+from rachelutils.hdfload import getvar
 
 def calcgammadist(m,n,coef,ex,nu):
     '''Returns diameters and number for size distribution'''
