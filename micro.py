@@ -40,8 +40,10 @@ def calcd(fil,var):
               'hail': 3.  }
     mass = getvar(fil,var)
     num = getvar(fil,nnames[var])
+    
     coef = cfmas[var]
     ex = pwmas[var]
 
     d=(mass/(num*coef))**(1./ex)
+    d[num==0]=0.0
     return d
