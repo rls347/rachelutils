@@ -3,10 +3,10 @@ import numpy as np
 
 def getvar(fil, varname):
 	try:
-		var = np.squeeze(fil[varname].value)
+		var = np.squeeze(fil[varname][:])
 	except:
 		filey = hdf.File(fil, 'r')
-		var = np.squeeze(filey[varname].value)
+		var = np.squeeze(filey[varname][:])
 		filey.close()
 
 	return var
