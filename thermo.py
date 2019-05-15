@@ -99,17 +99,22 @@ def moistadiabat(height,press,zlcl,tlcl,tempk,q):
     return parcel
 
 
-def get_cape(filename,flag):
+def get_cape(filename,flag,coords = [(np.arange(82),10,10),]):
+    [x[c] for c in lc]
     try:
         fil = hdf.File(filename, 'r')
         height = getvar(fil, 'z_coords')
-        tempk = getvar(fil, 'tempk')[:,10,10]
-        q = getvar(fil, 'vapor')[:,10,10]
-        press = getvar(fil, 'press')[:,10,10]
+        tempk = getvar(fil, 'tempk')
+        q = getvar(fil, 'vapor')
+        press = getvar(fil, 'press')
         dz = getdz(fil)
         fil.close()
     except:
         print 'error reading variables'
+
+    if type(coords) is tuple:
+        coords = [coords,]
+
 
     if flag == 'sfc':
         zlcl, lcl, tlcl = find_lcl_sfc(height,tempk,q,press)
