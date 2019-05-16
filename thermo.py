@@ -99,25 +99,14 @@ def moistadiabat(height,press,zlcl,tlcl,tempk,q):
     return parcel
 
 
-def get_cape(filename,flag):
-    try:
-        fil = hdf.File(filename, 'r')
-        height = getvar(fil, 'z_coords')
-        tempk = getvar(fil, 'tempk')[:,10,10]
-        q = getvar(fil, 'vapor')[:,10,10]
-        press = getvar(fil, 'press')[:,10,10]
-        dz = getdz(fil)
-        fil.close()
-    except:
-        print 'error reading variables'
-
+def capecalc(height,tempk,q,press,dz,flag):
     if flag == 'sfc':
         zlcl, lcl, tlcl = find_lcl_sfc(height,tempk,q,press)
     elif flag == 'mu':
         zlcl, lcl, tlcl = find_lcl_mostunstable(height,tempk,q,press)
     else:
         zlcl, lcl, tlcl = find_lcl_ml100(height,tempk,q,press)
-        
+
     parcel = moistadiabat(height,press,zlcl,tlcl,tempk,q)
     parceltv = parcel*(1+(.61*satmixratio(parcel,press)))
     Tv = tempk*(1+(.61*(q/1000.)))
@@ -127,8 +116,33 @@ def get_cape(filename,flag):
     el = np.max(np.asarray(posarea))
     intvarpos=intvar[lfc:el+1]
     zpos = height[lfc:el+1]
-    
+
 #    cape1 = np.sum(intvar[posarea])
     cape = np.trapz(intvarpos, dx=np.diff(zpos))
 
-    return cape, parcel 
+    return cape
+
+
+
+def get_cape(filename,flag,coords = None):
+    try:
+        fil = hdf.File(filename, 'r')
+        height = getvar(fil, 'z_coords')
+        tempk = getvar(fil, 'tempk')
+        q = getvar(fil, 'vapor')
+        press = getvar(fil, 'press')
+        dz = getdz(fil)
+        fil.close()
+    except:
+        print 'error reading variables'
+
+    if type(coords) is tuple:
+        c0,c1 = coords
+        outvar = capecalc(height,tempk[:,c0,c1],q[:,c0,c1],press[:,c0,c1],dz,flag)
+    else:
+        outvar = np.zeros((tempk.shape[1],tempk.shape[2]))
+        for c0 in range(outvar.shape[0]):
+            for c1 in range(outvar.shape[1]):
+                outvar[c0,c1] = capecalc(height,tempk[:,c0,c1],q[:,c0,c1],press[:,c0,c1],dz,flag)
+
+    return outvar

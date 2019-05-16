@@ -4,7 +4,6 @@ from rachelutils.hdfload import getvar
 
 def calcgammadist(m,n,coef,ex,nu):
     '''Returns diameters and number for size distribution'''
-
     dvals = np.linspace(1,10000,5000)*1e-6
     with np.errstate(invalid='ignore',divide='ignore'):
         d=(m/(n*coef))**(1./ex)
@@ -18,7 +17,9 @@ def gammadist_diam(d,ex,nu):
 
     dvals = np.linspace(1,10000,5000)*1e-6
     dn = (gamma(nu)/gamma(nu+ex))**(1./ex)*d
+
     func = (1/gamma(nu))*((dvals/dn)**ex)*(1/dn)*np.exp(-1*dvals/dn)
+    
     return dvals, func
 
 def calcd(fil,var,x=None):
@@ -96,7 +97,6 @@ def intsizedist(fil,var,coord=None):
         
     if var == 'cloud' or var == 'drizzle':
         num=num*1000.*1000.
-
     coef, ex, nu = getdefault(var) 
 
     m=mass.flatten()
@@ -126,9 +126,3 @@ def getcloudtop(fil):
 
 
 
-
-
-
-
-
-    
