@@ -9,7 +9,7 @@ def calcgammadist(m,n,coef,ex,nu):
         d=(m/(n*coef))**(1./ex)
         
     dn = (gamma(nu)/gamma(nu+ex))**(1./ex)*d
-    func = (1/gamma(nu))*((dvals/dn)**ex)*(1/dn)*np.exp(-1*dvals/dn)
+    func = (1/gamma(nu))*((dvals/dn)**(nu-1))*(1/dn)*np.exp(-1*dvals/dn)
     return dvals, func
     
 def gammadist_diam(d,ex,nu):
