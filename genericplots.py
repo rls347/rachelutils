@@ -21,8 +21,10 @@ def movie(pcp, outname, title, height):
         ys = xs
     else:
         ys = height/1000.
+
     fig = plt.figure()
     z2 = pcp[0,:,:]
+    print xs.shape, ys.shape, z2.shape
     
     cont2 = plt.contourf(xs,ys,z2,levels=np.linspace(np.min(pcp),np.max(pcp),20))
     if len(ys) < 100:
@@ -45,3 +47,4 @@ def movie(pcp, outname, title, height):
     anim.save(outname)
 #    anim.save('uwind.mp4')
     plt.clf()
+    plt.close()
