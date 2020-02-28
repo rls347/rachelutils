@@ -16,18 +16,19 @@ def movie(pcp, outname, title, height):
     numfiles = pcp.shape[0]
 #    pcp = np.asarray(pcp)
     #pcp = np.swapaxes(pcp,1,2)
-    print pcp.max(), pcp.min()
     xs = np.arange(pcp.shape[2])*.25
     if (pcp.shape[1]==pcp.shape[2]):
         ys = xs
     else:
         ys = height/1000.
-    print xs.shape, ys.shape
+
     fig = plt.figure()
     z2 = pcp[0,:,:]
-    print z2.shape
+    print xs.shape, ys.shape, z2.shape
     
     cont2 = plt.contourf(xs,ys,z2,levels=np.linspace(np.min(pcp),np.max(pcp),20))
+    if len(ys) < 100:
+        plt.ylim(0,18)
     c2 = plt.colorbar(cont2,label = title) 
 #    plt.ylim(0,16)
 
@@ -36,11 +37,14 @@ def movie(pcp, outname, title, height):
         plt.clf()
         cont2 = plt.contourf(xs,ys,z2,levels=np.linspace(np.min(pcp),np.max(pcp),20))
         c2 = plt.colorbar(cont2,label = title)
-#        plt.ylim(0,16)
+        if len(ys) < 100:
+            plt.ylim(0,18)
         onetitle='Time ' + str(i)
         plt.title(onetitle)
         return cont2
 
     anim = animation.FuncAnimation(fig, animate, frames=numfiles)
-    anim.save(outname+title+'.mp4')
+    anim.save(outname)
+#    anim.save('uwind.mp4')
     plt.clf()
+    plt.close()
