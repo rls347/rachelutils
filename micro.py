@@ -44,10 +44,7 @@ def calcgammadist(m,n,coef,ex,nu):
 def gammadist_diam(d,ex,nu):
     '''Returns diameters and number for size distribution given mean mass diameter'''
 
-    #dvals = np.linspace(1,500,5000)*1e-6
-    dvals = np.arange(1,5000)*1e-7
-    d=(m/(n*coef))**(1./ex)
-
+    dvals = np.linspace(1,10000,5000)*1e-6
     dn = (gamma(nu)/gamma(nu+ex))**(1./ex)*d
 
     func = (1/gamma(nu))*((dvals/dn)**ex)*(1/dn)*np.exp(-1*dvals/dn)
@@ -122,10 +119,17 @@ def intsizedist(fil,var,coord=None):
             }
     #If no coord given, uses None, which just returns full array + a dimension
     
+<<<<<<< HEAD
     
     mass = np.array(getvar(fil,var)[coord]/1000.)
     num = np.array(getvar(fil,nnames[var])[coord])
     
+=======
+    
+    mass = np.array(getvar(fil,var)[coord]/1000.)
+    num = np.array(getvar(fil,nnames[var])[coord])
+    
+>>>>>>> 50c52b0e345d27ca2b5a8c9b4e837a00a04e725c
         
     if var == 'cloud' or var == 'drizzle':
         num=num*1000.*1000.

@@ -215,5 +215,4 @@ def get_cape(filename,flag,coords = None):
             for c1 in range(capevar.shape[1]):
                 capevar[c0,c1],cinvar[c0,c1] = capecalc(height,tempk[:,c0,c1],q[:,c0,c1],press[:,c0,c1],flag)
 
-
     return capevar, cinvar
