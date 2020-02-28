@@ -37,7 +37,8 @@ def find_lcl_sfc(height,tempk,q,press):
 def find_lcl_ml100(height,tempk,q,press):
     '''expects height, temperature in kelvin, q in g/kg, pressure in mb'''
     psfc = press[1]
-    lev100 = np.argmin(np.abs(press-(psfc-100)))
+    #lev100 = np.argmin(np.abs(press-(psfc-100)))
+    lev100 = np.max(np.where(height<200.))
 
     rho = (press*100)/(RD*tempk)
     meanz = np.mean(height[1:lev100+1]*rho[1:lev100+1])/np.mean(rho[1:lev100+1])
@@ -132,3 +133,23 @@ def get_cape(filename,flag):
     cape = np.trapz(intvarpos, dx=np.diff(zpos))
 
     return cape, parcel 
+    
+    
+def getparcel(height,tempk,q,press,flag):
+    if height.max() < 1000:
+        height = height*1000.
+    if tempk.max() < 100:
+        tempk = tempk + 273.15
+    if q.max() < 1:
+        q = q * 1000.
+    if press.max() > 2000:
+        press = press/100.
+    if flag == 'sfc':
+        zlcl, lcl, tlcl = find_lcl_sfc(height,tempk,q,press)
+    elif flag == 'mu':
+        zlcl, lcl, tlcl = find_lcl_mostunstable(height,tempk,q,press)
+    else:
+        zlcl, lcl, tlcl = find_lcl_ml100(height,tempk,q,press)
+    pcl = moistadiabat(height,press,zlcl,tlcl,tempk,q)
+    return pcl
+    
